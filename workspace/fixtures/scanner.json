@@ -1,0 +1,12 @@
+{
+  "format": "lanternprobe-1",
+  "results": [
+    {
+      "rule_id": "LP-2",
+      "location": "src/app.py:9",
+      "message": "possible unsafe redirect",
+      "level": "warning",
+      "confidence": 0
+    }
+  ]
+}

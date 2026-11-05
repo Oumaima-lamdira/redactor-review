@@ -1,0 +1,23 @@
+{
+  "schema": 2,
+  "findings": [
+    {
+      "finding_id": "F-11",
+      "tenant": "cedar",
+      "title": "DEMO-plain proof",
+      "severity": "medium",
+      "verified": false,
+      "confidence": 0,
+      "visibility": "shareable",
+      "evidence": [
+        {
+          "text": "saved response",
+          "audience": "customer"
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    "proof.txt"
+  ]
+}

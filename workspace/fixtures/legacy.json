@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "findings": [
+    {
+      "tenant": "cedar",
+      "title": "DEMO-plain proof",
+      "severity": "medium",
+      "visibility": "shareable",
+      "evidence": [
+        {
+          "text": "saved response",
+          "audience": "customer"
+        }
+      ],
+      "key": "F-11"
+    }
+  ]
+}

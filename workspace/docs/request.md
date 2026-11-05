@@ -1,0 +1,3 @@
+# EB-65: review the generated redaction helper
+
+Ivo, 2026-10-21 09:40 UTC+00:00: an assistant shortened our redactor. The ordinary DEMO-plain sample passes, but the list can contain punctuation and overlapping tokens, and evidence has nested metadata and lists. Review and repair what is needed for the configured-token contract in docs/contracts.md, Redaction. Keep redact SOURCE --secrets FILE stable. Say ship or hold for this bounded contract in CHOICES.md and cite your checks; you do not need to redesign the utility. Do not claim automatic discovery of unknown secrets or coverage of image/binary attachments. Source files must remain untouched. False, zero and null are data, not strings to rewrite.
