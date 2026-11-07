@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import copy
-import re
 
 from bundle_cli import data
 
@@ -69,28 +68,29 @@ def import_report(report: data.Record, tenant: str) -> data.Record:
 
 
 def _clean_text(value: str, secrets: list[str]) -> str:
+    """Literal (not regex) replacement, longest token first so a shorter overlap cannot leave a suffix."""
     cleaned = value
-    for secret in secrets:
-        if secret != "":
-            cleaned = re.sub(secret, "[REDACTED]", cleaned)
+    for secret in sorted((secret for secret in secrets if secret != ""), key=len, reverse=True):
+        cleaned = cleaned.replace(secret, "[REDACTED]")
     return cleaned
 
 
 def _walk(value: object, secrets: list[str]) -> object:
+    """Recurse into dict values and lists; keys and non-string scalars are returned unchanged."""
+    if isinstance(value, str) is True:
+        return _clean_text(value, secrets)
     if isinstance(value, dict) is True:
-        result = {key: _clean_text(item, secrets) if isinstance(item, str) is True else item
-                  for key, item in value.items()}
-        if isinstance(result.get("findings"), list) is True:
-            result["findings"] = [{key: _clean_text(item, secrets) if isinstance(item, str) is True else item
-                                   for key, item in finding.items()}
-                                  for finding in result["findings"]]
-        return result
+        return {key: _walk(item, secrets) for key, item in value.items()}
+    if isinstance(value, list) is True:
+        return [_walk(item, secrets) for item in value]
     return value
 
 
 def redact(bundle: data.Record, secrets: list[str]) -> data.Record:
     """Remove configured literal secrets from nested values, preserving types."""
     data.check(bundle)
+    if isinstance(secrets, list) is False or any(isinstance(secret, str) is False for secret in secrets):
+        raise ValueError("secrets values must be a list of strings")
     result = _walk(bundle, secrets)
     if isinstance(result, dict) is False:
         raise ValueError("bundle must remain an object")
